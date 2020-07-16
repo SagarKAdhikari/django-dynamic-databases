@@ -92,7 +92,7 @@ class CreateUser(APIView):
 
 
 
-class CreateSth(APIView):
+class CreateSth(APIView): # just for creating test user.
     # permission_classes=[rest_framework.permissions.IsAuthenticated]
     def get(self,request,format=None):
         print("HEYMN")
