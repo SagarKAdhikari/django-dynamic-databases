@@ -14,29 +14,10 @@ class RouterMiddleware(object):
 
     def __call__(self, request):
 
-        print("XXX")
-        print(request.body)
-        print(request.method)
-
-        print("A")
-        print(hasattr(request,'user'))
-        print("X")
-        print(request.user)
-        print("B")
-
-        print(request.META.get('HTTP_AUTHORIZATION'))
-
         if hasattr(request,'user'):
             if request.user and request.user.id:
                 request_cfg.cfg='db'+str(request.user.username)
-
                 pass
-                # pass
-
-        print(request.META.get('HTTP_AUTHORIZATION'))
-
-        print("ZZ")
-        print(request.user)
 
         response = self.get_response(request)
         return response
@@ -44,18 +25,13 @@ class RouterMiddleware(object):
 
 class DatabaseRouter(object):
     def _default_db( self ):
-        print("SSS")
-        print(request_cfg)
+        
         if hasattr( request_cfg, 'cfg' ):
-
-            print("what")
-            print(request_cfg.cfg)
             return request_cfg.cfg
         else:
             return 'default'
 
     def db_for_read( self, model, **hints ):
-        print("YYY")
         return self._default_db()
 
     def db_for_write( self, model, **hints ):
