@@ -1,14 +1,16 @@
-from django.shortcuts import render
+import os
+import sys
 
-from rest_framework.views import APIView
+from django.shortcuts import render
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
 import rest_framework
+from rest_framework.views import APIView
 # Create your views here.
 
-import os
-
-from django.conf import settings
-
-from django.contrib.auth import get_user_model
+from psycopg2 import connect
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 
@@ -38,26 +40,13 @@ DATABASES['%(id)s'] = {
 class CreateUser(APIView):
     permission_classes=[rest_framework.permissions.AllowAny]
     def get(self,request,id,format=None):
-        # get_user_model().objects.create_user(username='hey',password='asdf1234')
-        # print(get_user_model().objects.all())
-
-        print("sddfs")
-
-
+       
         u=get_user_model().objects.create_user(username=id,password='asdf1234')
-
-
-
-        from psycopg2 import connect
-        import sys
-        from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
         con = None
         con = connect(user='postgres', host = 'localhost', password='postgres')
 
-
         db_name='db'+str(id)
-
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
         cur.execute('CREATE DATABASE ' + db_name)
@@ -95,8 +84,4 @@ class CreateUser(APIView):
 class CreateSth(APIView): # just for creating test user.
     # permission_classes=[rest_framework.permissions.IsAuthenticated]
     def get(self,request,format=None):
-        print("HEYMN")
-        print(request.data)
-        print(request.GET)
-        print(request.user)
         get_user_model().objects.create_user(username='kadauser',password='asdf1234')
